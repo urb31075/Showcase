@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dashboard CurrencyCulture="ru-RU">
+  <Title Text="Прогноз IQ по предприятию" />
+  <DataSources>
+    <SqlDataSource ComponentName="dashboardSqlDataSource1">
+      <Name>StaffIQDataModel</Name>
+      <Connection Name="SPDEV_StaffIQTest_Connection" ProviderKey="MSSqlServer">
+        <Parameters>
+          <Parameter Name="server" Value="SPDEV" />
+          <Parameter Name="database" Value="StaffIQTest" />
+          <Parameter Name="useIntegratedSecurity" Value="True" />
+          <Parameter Name="read only" Value="1" />
+          <Parameter Name="generateConnectionHelper" Value="false" />
+          <Parameter Name="userid" Value="" />
+          <Parameter Name="password" Value="" />
+        </Parameters>
+      </Connection>
+      <Query Type="CustomSqlQuery" Name="CustomSqlQuery">
+        <Sql>select * from StaffIQDataModel</Sql>
+      </Query>
+      <ResultSchema>
+        <DataSet Name="StaffIQDataModel">
+          <View Name="CustomSqlQuery">
+            <Field Name="id" Type="Int32" />
+            <Field Name="IQ" Type="Int32" />
+            <Field Name="DepartmentName" Type="String" />
+            <Field Name="DepartmentId" Type="Int32" />
+            <Field Name="GenderName" Type="String" />
+            <Field Name="GenderId" Type="Int32" />
+            <Field Name="Floor" Type="Int32" />
+          </View>
+        </DataSet>
+      </ResultSchema>
+    </SqlDataSource>
+  </DataSources>
+  <Items>
+    <Chart ComponentName="chartDashboardItem1" Name="IQ по отделам" DataSource="dashboardSqlDataSource1" DataMember="CustomSqlQuery">
+      <DataItems>
+        <Measure DataMember="IQ" SummaryType="Average" UniqueName="DataItem0" />
+        <Dimension DataMember="DepartmentId" IsDiscreteScale="true" UniqueName="DataItem1" />
+      </DataItems>
+      <Arguments>
+        <Argument UniqueName="DataItem1" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Панель 1">
+          <Series>
+            <Simple Name="IQ (Среднее)">
+              <Value UniqueName="DataItem0" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+    </Chart>
+    <Chart ComponentName="chartDashboardItem2" Name="QI по этажам" DataSource="dashboardSqlDataSource1" DataMember="CustomSqlQuery" Rotated="true">
+      <ColoringOptions UseGlobalColors="false" />
+      <DataItems>
+        <Dimension DataMember="Floor" IsDiscreteScale="true" UniqueName="DataItem1" />
+        <Measure DataMember="IQ" SummaryType="Average" UniqueName="DataItem0" />
+      </DataItems>
+      <Arguments>
+        <Argument UniqueName="DataItem1" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Панель 1">
+          <Series>
+            <Simple Name="IQ (Среднее)">
+              <Value UniqueName="DataItem0" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+    </Chart>
+    <Pie ComponentName="pieDashboardItem1" Name="IQ для М и Ж" DataSource="dashboardSqlDataSource1" DataMember="CustomSqlQuery">
+      <DataItems>
+        <Measure DataMember="IQ" Name="IQ (Среднее)" SummaryType="Max" UniqueName="DataItem0" />
+        <Dimension DataMember="GenderName" UniqueName="DataItem1" />
+      </DataItems>
+      <Arguments>
+        <Argument UniqueName="DataItem1" />
+      </Arguments>
+      <Values>
+        <Value UniqueName="DataItem0" />
+      </Values>
+    </Pie>
+  </Items>
+  <LayoutTree>
+    <LayoutGroup Orientation="Vertical">
+      <LayoutItem DashboardItem="chartDashboardItem1" Weight="56.554878048780488" />
+      <LayoutGroup Weight="43.445121951219512">
+        <LayoutItem DashboardItem="pieDashboardItem1" Weight="35.845749342681856" />
+        <LayoutItem DashboardItem="chartDashboardItem2" Weight="64.154250657318144" />
+      </LayoutGroup>
+    </LayoutGroup>
+  </LayoutTree>
+</Dashboard>
